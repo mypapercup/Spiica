@@ -1,0 +1,146 @@
+<html> <head>
+<title>Spiica tests</title>
+<script type="text/javascript" src="processing.js"></script>
+<script type="text/javascript" src="init.js"></script>
+</head>
+<body>
+<script type="application/processing">
+
+class TreeNode
+{
+  float x,y;
+
+  TreeNode(float x, float y)
+  {
+    this.x = x;
+    this.y = y;
+  }
+
+}
+
+PImage baloons;
+
+int maxDepth = 30;
+int currentDepth = 0;
+TreeNode[] nodes = new TreeNode[maxDepth];
+
+int stage = 2;
+float angle = 0;
+float tx, ty;
+
+void setup()
+{
+  background(255);
+  smooth();
+  size(600,600);
+  baloons = loadImage("baloons.jpg");
+  
+  for(int i = 0; i < maxDepth; i++)
+  {
+    nodes[i] = new TreeNode(width/2,height/2);
+  }
+}
+
+
+void draw()
+{
+
+  if (stage == 0)
+  {
+    // going down
+    if (currentDepth < maxDepth - 1)
+    {
+      float dx, dy;
+      // get v
+      if (currentDepth > 0)
+      {
+        dx = nodes[currentDepth].x - nodes[currentDepth-1].x;
+        dy = nodes[currentDepth].y - nodes[currentDepth-1].y;
+
+        float dx2, dy2;
+        dx2 = tx - nodes[currentDepth].x;
+        dy2 = ty - nodes[currentDepth].y;
+
+        float distance = sqrt(dx2*dx2 + dy2*dy2);
+        dx2 /= distance;
+        dy2 /= distance;
+
+        dx += dx2 * 8.0;
+        dy += dy2 * 8.0;
+        dx *= 0.8;
+        dy *= 0.8;
+
+
+      }
+      else
+      {
+        // trunk
+        float a = 0;//random(2*PI);
+        float startingLength = 20;
+        dx = sin(a)*startingLength;
+        dy = cos(a)*startingLength;
+      }
+
+      nodes[currentDepth+1].x = nodes[currentDepth].x + dx;
+      nodes[currentDepth+1].y = nodes[currentDepth].y + dy;
+        
+//      float thickness = ((maxDepth + 1) - currentDepth) / 2;
+      float pointThickness = ((maxDepth + 1) - currentDepth);
+      float lineThickness = ((maxDepth + 1) - currentDepth)/5;
+
+      strokeWeight(lineThickness);
+      stroke(#FF5500, #550055);
+      line(nodes[currentDepth].x, nodes[currentDepth].y, nodes[currentDepth+1].x, nodes[currentDepth+1].y);
+      strokeWeight(pointThickness);
+      stroke(#FF0000, #550055);
+
+      point(nodes[currentDepth].x, nodes[currentDepth].y);
+      image(baloons, nodes[currentDepth].x, nodes[currentDepth].y);
+
+      currentDepth++;
+      
+      if (currentDepth == maxDepth - 1) 
+        stage = 1;
+    }
+
+  }
+  else if (stage == 1)
+  {
+    // going up
+    if (currentDepth > 0)
+    {
+      currentDepth--;
+      if (currentDepth == 0)
+      {
+        // done
+        stage = 3;
+      }  
+      else if (random(100) > 80) stage = 2; // new branch
+    }
+  }
+  else if (stage == 2)
+  {
+    // new target
+    float tangle = random(-PI, PI);
+    tx = width/2 + sin(tangle) * width/3;
+    ty = height/2 + cos(tangle) * height/3;
+    stage = 0;
+  }
+}
+
+
+void mousePressed()
+{
+    background(255);
+    stage = 2;
+    currentDepth = 0;
+}
+</script><canvas></canvas>
+
+
+
+<div style="display:none;"><img src='baloons.jpg'
+id='baloons.jpg'/></div> 
+
+
+</body> </html>

@@ -1,0 +1,83 @@
+<html> 
+
+<head>
+<title>Spiica drawing</title>
+<script type="text/javascript" src="processing.js"></script>
+<script type="text/javascript" src="init.js"></script>
+</head>
+
+<body>
+<script type="application/processing">
+  
+class Button
+{
+  Button(String name, int x, int y)
+  {
+    font = loadFont("Courier");
+    int fontSize = 16;
+    textFont(font, fontSize); 
+    int pad = 3;
+    iX = x;
+    iY = y;
+    iWidth = 80;
+//    iWidth = textWidth(name) + 2 * pad;        
+    iHeight = fontSize + 2 * pad;
+
+    fill(55,55,55,55);
+    rect(iX, iY - fontSize, iWidth, iHeight);    
+    fill(30);
+    text(name, iX + pad, iY + pad - 1);     
+  }
+  void Press()
+ {
+   rect(100,100, 30, 40);
+ }
+ 
+  PFont font;
+  int iX;
+  int iY;
+  float iWidth;
+  float iHeight;
+}
+
+Button saveMe;
+Button cancelMe;
+
+void setup() 
+{
+  background(255);
+  smooth();
+  size(600,600);
+
+  noLoop();
+
+  saveMe = new Button("Save", 50, 50);
+  cancelMe = new Button("Cancel", 50, 80);
+}
+
+int value = 0;
+
+void draw() {
+  fill(value);
+  rect(250, 25, 50, 50);
+}
+
+void mouseClicked() {
+  if(value == 0) {
+    value = 255;
+  } else {
+    value = 0;
+  }
+}
+
+
+
+
+
+</script>
+
+<canvas style="border-style:solid;border-width:1px;"></canvas>
+
+
+</body> 
+</html>

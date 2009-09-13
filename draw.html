@@ -1,0 +1,51 @@
+<html> 
+
+<head>
+<title>Spiica drawing</title>
+<script type="text/javascript" src="processing.js"></script>
+<script type="text/javascript" src="init.js"></script>
+</head>
+
+<body>
+<script type="application/processing">
+  
+int previousX = 0;
+int previousY = 0;
+
+void setup() 
+{
+  background(255);
+  smooth();
+  size(600,600);
+
+  noLoop();
+}
+
+void draw() 
+{
+
+}
+
+void mousePressed()
+{
+  previousX = mouseX;
+  previousY = mouseY;
+}
+
+void mouseDragged() 
+{
+  strokeWeight(5);
+  line(previousX, previousY, mouseX, mouseY);
+  previousX = mouseX;
+  previousY = mouseY;  
+  
+}
+
+
+</script>
+
+<canvas style="border-style:solid;border-width:1px;"></canvas>
+
+
+</body> 
+</html>
